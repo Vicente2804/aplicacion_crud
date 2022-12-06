@@ -32,15 +32,16 @@ function validarFormulario (e) {
         objEmpleado.nombre = nombreImput.value;
         objEmpleado.puesto = puestoImput.value;
 
-        agregarEmpleado();
-        localStorage.setItem('cliente' , JSON.stringify(listaEmpleados));
+        agregarEmpleado(objEmpleado);
+        
     }
 }
 
 
-function agregarEmpleado() {
-    listaEmpleados.push({...objEmpleado});
-
+function agregarEmpleado(empleado) {
+    let baseDatos =JSON.parse(localStorage.getItem('cliente'));
+    baseDatos.push(empleado)
+    localStorage.setItem('cliente' , JSON.stringify(baseDatos));
     mostrarEmpleados();
 
     formulario.reset();
@@ -59,12 +60,12 @@ function mostrarEmpleados() {
     limpiarHTML()
 
     const divEmpleados = document.querySelector('.div-empleados');
-
-    listaEmpleados.forEach(empleado => {
+    let baseDatos =JSON.parse(localStorage.getItem('cliente'));
+    baseDatos.forEach(empleado => {
         const {id, nombre, puesto} = empleado;
 
         const parrafo = document.createElement('p');
-        parrafo.textContent = `${id} - ${nombre} - ${puesto} -`;
+        parrafo.textContent = `${id} - ${nombre} - Makeup tipo  ${puesto} -`;
         parrafo.dataset.id = id;
 
         const editarBoton = document.createElement('button');
@@ -100,18 +101,19 @@ function cargarEmpleado(empleado) {
 
 
 function editarEmpleado() {
-
+    let baseDatos =JSON.parse(localStorage.getItem('cliente'));
     objEmpleado.nombre = nombreImput.value;
     objEmpleado.puesto = puestoImput.value;
 
-    listaEmpleados.map( empleado => {
+    baseDatos = baseDatos.map( empleado => {
         if(empleado.id === objEmpleado.id) {
             empleado.id = objEmpleado.id;
             empleado.nombre = objEmpleado.nombre;
             empleado.puesto = objEmpleado.puesto;
         }
+        return empleado
     });
-
+    localStorage.setItem('cliente' , JSON.stringify(baseDatos));
     limpiarHTML();
     mostrarEmpleados();
 
@@ -123,8 +125,11 @@ function editarEmpleado() {
 }
 
 function eliminarEmpleado(id) {
-    listaEmpleados = listaEmpleados.filter(empleado => empleado.id !== id);
+    let baseDatos =JSON.parse(localStorage.getItem('cliente'));
+    baseDatos = baseDatos.filter(empleado => empleado.id !== id);
 
+    localStorage.setItem('cliente' , JSON.stringify(baseDatos));
+    
     limpiarHTML();
     mostrarEmpleados();
     
@@ -136,3 +141,11 @@ function limpiarHTML() {
         divEmpleados.removeChild(divEmpleados.firstChild);
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    if(localStorage.getItem('cliente') === null) {
+        localStorage.setItem('cliente', JSON.stringify([]))
+    }
+    
+    mostrarEmpleados ();
+});
