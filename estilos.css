@@ -154,3 +154,34 @@ hr {
         font-size: 25px;
         text-decoration: none;
     }
+
+    @media  screen and (min-width:767px) and (max-width:1023px) {
+        .contenedor {
+            flex-direction: column;
+        }
+        .div-formulario {
+            width: 95%;
+        }
+        .contenedor .div-listado {
+            width: 95%;
+        }
+        
+    }
+
+    @media screen and (max-width:767px) {
+        .hed h1 {
+            font-size:80px; 
+        }
+        .contenedor {
+            flex-direction: column;
+        }
+        .div-formulario {
+            width:auto;
+        }
+        .contenedor .div-listado {
+            width: auto;
+        }
+        .enlaces {
+            flex-direction: column;
+        }
+    }
